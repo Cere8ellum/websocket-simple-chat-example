@@ -1,0 +1,27 @@
+{
+  "name": "geekbrains-university",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "My studies in GeekBrains",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cere8ellum/geekbrains-university.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cere8ellum/geekbrains-university/issues"
+  },
+  "homepage": "https://github.com/Cere8ellum/geekbrains-university#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "inquirer": "^9.1.4",
+    "socket.io": "^4.5.4"
+  }
+}

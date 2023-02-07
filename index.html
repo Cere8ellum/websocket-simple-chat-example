@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messanger</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body id="body">
+    <div class="container">
+      <div class="row">
+        <div class="col col-md-6 mx-auto">
+          <form id="usernameForm" class="d-block text-center">
+            <legend>Type your name</legend>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="username"
+                id="usernameForm__input"
+              />
+              <button type="submit" class="btn btn-outline-secondary">
+                Submit
+              </button>
+            </div>
+          </form>
+
+          <form id="sendMsgForm" class="d-none text-center">
+            <legend>Say something</legend>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="your text"
+                id="sendMsgForm__input"
+              />
+              <button type="submit" class="btn btn-outline-secondary">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col">
+          <h2>Messenger</h2>
+          <div id="chat"></div>
+        </div>
+        <div class="col col-lg-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Users connected</h5>
+              <h6 id="usersQty" class="card-subtitle mb-2 text-muted"></h6>
+              <p id="users" class="card-text"></p>
+              <div id="connectedMsg" class="card-text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+      integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript">
+      const socket = io("localhost:3000");
+      const chatEl = document.getElementById("chat");
+      const connectedMsgEl = document.getElementById("connectedMsg");
+
+      socket.on("connect", () => {});
+
+      /***************** NEW CLIENT */
+      socket.on("NEW_CONN_EVENT", ({ msg }) => {
+        const msgDiv = `<div class="alert alert-info mt-2" role="alert"><b>${msg[0]}</b> ${msg[1]}</div>`;
+        connectedMsgEl.insertAdjacentHTML("afterbegin", msgDiv);
+        // Show users
+        showUsers(msg[2]);
+      });
+
+      /***************** CLIENT DISCONNECTED */
+      socket.on("CONN_DISABLED_EVENT", ({ msg }) => {
+        const msgDiv = `<div class="alert alert-danger mt-2" role="alert"><b>${msg[0]}</b> ${msg[1]}</div>`;
+        connectedMsgEl.insertAdjacentHTML("afterbegin", msgDiv);
+        // Show users
+        showUsers(msg[2]);
+      });
+
+      /***************** NEW MESSAGE */
+      socket.on("NEW_MSG_EVENT", ({ msg }) => {
+        const msgDiv = `<div class="card mt-2">
+                                    <div class="card-header">
+                                      ${msg[0]}
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">${msg[1]}</li>
+                                    </ul>
+                                </div>`;
+        chatEl.insertAdjacentHTML("beforeend", msgDiv);
+      });
+
+      /************** Username Form */
+      sendForm(
+        "usernameForm",
+        "usernameForm__input",
+        "sendMsgForm",
+        "NEW_USER_EVENT"
+      );
+
+      /************** Send Message Form */
+      sendForm("sendMsgForm", "sendMsgForm__input", null, "NEW_MSG_EVENT");
+
+      /************** Functions */
+      function showUsers(arr) {
+        const usersQtyEl = document.getElementById("usersQty");
+        const usersEl = document.getElementById("users");
+
+        // Qty of users
+        usersQtyEl.innerText = arr.length;
+
+        let usersString = "";
+        arr.forEach((el) => {
+          usersString += `<span class="badge bg-secondary me-2 p-2">${el}</span>`;
+        });
+        usersEl.innerHTML = usersString;
+      }
+
+      function sendForm(formId, inputId, toggleFormId, connId) {
+        const fId = document.getElementById(formId);
+
+        fId.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const value = document.getElementById(inputId);
+          if (value.value.trim().length) {
+            socket.emit(connId, {
+              msg: value.value,
+            });
+
+            if (toggleFormId) {
+              fId.classList.toggle("d-none");
+              document.getElementById(toggleFormId).classList.toggle("d-none");
+            }
+          }
+          value.value = "";
+        });
+      }
+    </script>
+  </body>
+</html>
