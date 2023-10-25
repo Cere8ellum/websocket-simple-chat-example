@@ -1,8 +1,8 @@
 {
-  "name": "geekbrains-university",
+  "name": "websocket-chat-example",
   "type": "module",
   "version": "1.0.0",
-  "description": "My studies in GeekBrains",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Cere8ellum/geekbrains-university.git"
+    "url": "https://github.com/Cere8ellum/websocket-simple-chat-example"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Cere8ellum/geekbrains-university/issues"
+    "url": "https://github.com/Cere8ellum/websocket-simple-chat-example/issues"
   },
-  "homepage": "https://github.com/Cere8ellum/geekbrains-university#readme",
+  "homepage": "https://github.com/Cere8ellum/websocket-simple-chat-example#readme",
   "dependencies": {
     "colors": "^1.4.0",
     "inquirer": "^9.1.4",
