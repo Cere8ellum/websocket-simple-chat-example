@@ -57,7 +57,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Users connected</h5>
-              <h6 id="usersQty" class="card-subtitle mb-2 text-muted"></h6>
+              <h6 id="usersQty" class="card-subtitle mb-2 p-1 text-muted"></h6>
               <p id="users" class="card-text"></p>
               <div id="connectedMsg" class="card-text"></div>
             </div>
@@ -132,7 +132,7 @@
 
         let usersString = "";
         arr.forEach((el) => {
-          usersString += `<span class="badge bg-secondary me-2 p-2">${el}</span>`;
+          usersString += `<span class="badge bg-secondary m-1 p-2">${el}</span>`;
         });
         usersEl.innerHTML = usersString;
       }
